@@ -70,6 +70,22 @@ function handleSaveClick(){
     link.click();
 }
 
+function handleDragEnter (event) {
+    event.target.style.opacity = 0.8;
+}
+function handleDragLeave (event) {
+    event.target.style.opacity = 1;
+}
+
+function handleDragOver (event) {
+    event.preventDefault();
+}
+
+function handleDrop (event) {
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    event.target.style.opacity = 1;
+}
+
 if(canvas){
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mousedown", startPainting);
@@ -77,6 +93,10 @@ if(canvas){
     canvas.addEventListener("mouseleave", stopPainting);
     canvas.addEventListener("click", handleCanvasClick);
     canvas.addEventListener("contextmenu", handleCM);
+    canvas.addEventListener("dragenter", handleDragEnter)
+    canvas.addEventListener("dragleave", handleDragLeave)
+    canvas.addEventListener("dragover", handleDragOver);
+    canvas.addEventListener("drop", handleDrop);
 }
 
 function handleModeClick(){
@@ -89,7 +109,11 @@ function handleModeClick(){
     }
 }
 
-Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick))
+Array.from(colors).forEach(color => {
+    color.draggable = true;
+    color.addEventListener("click", handleColorClick);
+    color.addEventListener("dragstart", handleColorClick);
+})
 
 if(range) {
     range.addEventListener("input", handleRangeChange)
