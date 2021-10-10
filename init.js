@@ -18,7 +18,6 @@ ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
-let filling = false;
 
 function stopPainting(){
     painting = false;
@@ -40,7 +39,7 @@ function onMouseMove (event) {
     }
 }
 
-function handleColorClick (event) {
+function handleColorChange (event) {
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
@@ -49,12 +48,6 @@ function handleColorClick (event) {
 function handleRangeChange (event) {
     const size = event.target.value;
     ctx.lineWidth = size;
-}
-
-function handleCanvasClick(){
-    if(filling){
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-    }
 }
 
 function handleCM(event){
@@ -90,7 +83,6 @@ if(canvas){
     canvas.addEventListener("mousedown", startPainting);
     canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
-    canvas.addEventListener("click", handleCanvasClick);
     canvas.addEventListener("contextmenu", handleCM);
     canvas.addEventListener("dragenter", handleDragEnter)
     canvas.addEventListener("dragleave", handleDragLeave)
@@ -98,20 +90,10 @@ if(canvas){
     canvas.addEventListener("drop", handleDrop);
 }
 
-function handleModeClick(){
-    if(filling === true) {
-        filling = false;
-        mode.innerText = "Fill"
-    } else {
-        filling = true;
-        mode.innerText = "Paint"
-    }
-}
-
 Array.from(colors).forEach(color => {
     color.draggable = true;
-    color.addEventListener("click", handleColorClick);
-    color.addEventListener("dragstart", handleColorClick);
+    color.addEventListener("click", handleColorChange);
+    color.addEventListener("dragstart", handleColorChange);
 })
 
 if(range) {
